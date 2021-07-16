@@ -1,4 +1,4 @@
-import { Module, Global } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongoClient } from 'mongodb';
@@ -21,14 +21,7 @@ const API_KEY_PROD = 'PROD1212121SA';
     // }),
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigType<typeof config>) => {
-        const {
-          connection,
-          user,
-          password,
-          host,
-          port,
-          dbName,
-        } = configService.mongo;
+        const { connection, user, password, host, port, dbName } = configService.mongo;
         return {
           uri: `${connection}://${host}:${port}`,
           user,
@@ -47,19 +40,11 @@ const API_KEY_PROD = 'PROD1212121SA';
     {
       provide: 'MONGO',
       useFactory: async (configService: ConfigType<typeof config>) => {
-        const {
-          connection,
-          user,
-          password,
-          host,
-          port,
-          dbName,
-        } = configService.mongo;
-        const uri = `${connection}://${user}:${password}@${host}:${port}/?authSource=admin&readPreference=primary`;
-        const client = new MongoClient(uri);
+        const { connection, user, password, host, port, dbName } = configService.mongo;
+        const uri = `${connection}://${host}:${port}`;
+        const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
         await client.connect();
-        const database = client.db(dbName);
-        return database;
+        return client.db(dbName);
       },
       inject: [config.KEY],
     },

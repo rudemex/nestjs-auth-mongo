@@ -44,9 +44,7 @@ export class UsersService {
   }
 
   update(id: string, changes: UpdateUserDto) {
-    return this.userModel
-      .findByIdAndUpdate(id, { $set: changes }, { new: true })
-      .exec();
+    return this.userModel.findByIdAndUpdate(id, { $set: changes }, { new: true }).exec();
   }
 
   remove(id: string) {

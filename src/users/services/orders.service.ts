@@ -10,11 +10,7 @@ export class OrdersService {
   constructor(@InjectModel(Order.name) private orderModel: Model<Order>) {}
 
   findAll() {
-    return this.orderModel
-      .find()
-      .populate('customer')
-      .populate('products')
-      .exec();
+    return this.orderModel.find().populate('customer').populate('products').exec();
   }
 
   async findOne(id: string) {
@@ -27,9 +23,7 @@ export class OrdersService {
   }
 
   update(id: string, changes: UpdateOrderDto) {
-    return this.orderModel
-      .findByIdAndUpdate(id, { $set: changes }, { new: true })
-      .exec();
+    return this.orderModel.findByIdAndUpdate(id, { $set: changes }, { new: true }).exec();
   }
 
   remove(id: string) {
