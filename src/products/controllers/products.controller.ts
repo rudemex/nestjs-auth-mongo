@@ -1,25 +1,23 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
-  Query,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
-  Body,
   Put,
-  Delete,
-  HttpStatus,
-  HttpCode,
-  Res,
-  // ParseIntPipe,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { MongoIdPipe } from '../../common/mongo-id.pipe';
+import { CreateProductDto, FilterProductsDto, UpdateProductDto } from '../dtos/products.dtos';
+import { ProductsService } from '../services/products.service';
 
-import { ParseIntPipe } from '../../common/parse-int.pipe';
-import { MongoIdPipe } from './../../common/mongo-id.pipe';
-import { CreateProductDto, UpdateProductDto, FilterProductsDto } from '../dtos/products.dtos';
-import { ProductsService } from './../services/products.service';
-
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
